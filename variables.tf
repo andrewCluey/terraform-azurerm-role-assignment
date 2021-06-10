@@ -20,3 +20,9 @@ variable "principal_id" {
   description = "description"
 }
 
+variable "name" {
+  type        = string
+  description = "The Name to assign to the new role assignment"
+  default     = ""
+}
+
