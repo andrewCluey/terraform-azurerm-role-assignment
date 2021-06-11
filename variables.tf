@@ -1,6 +1,6 @@
 variable "custom_role_definition_id" {
   type        = string
-  description = "If assigning a custom role, enter the ID here. One of either a Custom Role Id or a BuiltIn Role Name must be set."
+  description = "If assigning a custom role, enter the Scoped-ID of the Role Definition here. Conflicts with builtin_role_definition_name."
   default     = null
 }
 
@@ -18,11 +18,5 @@ variable "scope_id" {
 variable "principal_id" {
   type        = string
   description = "description"
-}
-
-variable "name" {
-  type        = string
-  description = "The Name to assign to the new role assignment"
-  default     = ""
 }
 
