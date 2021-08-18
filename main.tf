@@ -1,23 +1,14 @@
 locals {
- custom_role  = var.custom_role_definition_id == null ? false:true
- builtin_role = var.builtin_role_definition_name == null ? false:true
+    principals = toset(var.principal_ids)
 }
 
-resource "azurerm_role_assignment" "custom" {
-    count = local.custom_role ? 1:0
-
-    scope                = var.scope_id 
-    role_definition_id   = var.custom_role_definition_id 
-    principal_id         = var.principal_id
-}
-
-resource "azurerm_role_assignment" "built_in" {
-    count = local.builtin_role ? 1:0
-
-    scope                = var.scope_id 
-    role_definition_name = var.builtin_role_definition_name
-    principal_id         = var.principal_id
+resource "azurerm_role_assignment" "role_assignment" {
+    for_each = local.principals
     
+    scope                = var.scope_id
+    role_definition_name = var.role_definition_name
+    principal_id         = each.key
 }
+
 
 

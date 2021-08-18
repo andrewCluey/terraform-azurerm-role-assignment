@@ -7,30 +7,74 @@ Terraform module to assign either a custom or built in role to a resource in Azu
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
 | `scope_id` | `string` | true | The ID of the Subscription, Management Group or Resource group where the role is to be assigned. |
-| `principal_id` | `string` | true | The Object ID of the User, Group or Service Principal that is to be assigned the role. |
-| `builtin_role_definition_name` | `string` | false | The name of the built in role (such as Owner or Contributor) to assign to the principal at the chosen scope. If this is not used, then ```custom_role_defintion_id``` must be used. |
-| `custom_role_definition_id` | `string` | false | The ID of the custom role that is to be assigned to the principal at the chosen scope. If this is not used, then ```builtin_role_defintion_name``` must be used instead. |
-
+| `principal_ids` | `string` | true | A list of Object IDs definint the User, Group or Service Principal that is to be assigned the role. |
+| `role_definition_name` | `string` | true | The name of the role (such as Owner or Contributor) to assign to the principal at the chosen scope.|
 
 ## Example deployments
+Below are two possible ways to pefform the same task. That being to assign Contributor and Owner rights to a new Resource group.
 
-### custom role assigned to a subscription with Display Name of 'Production'
-```
-data "azurerm_subscriptions" "available" {}
+The first option is the simplest way, in that two separate modules are used. Once to assign the Owner role and the other to assgn the Contributor role.
+
+### Exmaple showing a simpel deployment. Using separate modules for assignign different roles.
+
+```hcl
+
+resource "azurerm_resource_group" "rg_role_assignment" {
+  name     = "rg-role-assignment"
+  location = "uksouth"
+}
 
 locals {
-    sub_name = "Production"
-    subs     = data.azurerm_subscriptions.available.subscriptions
-    sub_id   = [
-        for x in local.subs : x.subscription_id if x.display_name == local.sub_name
-    ]
+  rg_id                  = azurerm_resource_group.rg_role_assignment.id
+  Owner_principals       = ["4c9e9244-id", "4fsfesef-7349-ID"]
+  Contributor_principals = ["ObjevctID-4338-86ed-0a3fdc899804", "4IDIDID-7349-DUMMYID-OBJECTf"]
+
 }
 
-module "role_assignment" {
-    source = "../../"
 
-    scope_id                     = local.sub_id
-    builtin_role_definition_name = "Contributor"
-    principal_id                 = "4c9xxxx-22xxx-123e-d3f4-399dc34s964d" 
+module "Owner_roleAssignment" {
+  source   = "../../"
+
+  role_definition_name = "Owner"
+  scope_id             = local.rg_id
+  principal_ids        = local.Owner_principals
 }
+
+module "Contributor_roleAssignment" {
+  source   = "../../"
+
+  role_definition_name = "Contributor"
+  scope_id             = local.rg_id
+  principal_ids        = local.Contributor_principals
+}
+
+```
+
+### Example showing deploying multiple assignments to different scopes with different Roles using for_each at the ```module```.
+
+```hcl
+
+resource "azurerm_resource_group" "rg_role_assignment" {
+  name     = "rg-role-assignment"
+  location = "uksouth"
+}
+
+locals {
+  rg_id = azurerm_resource_group.rg_role_assignment.id
+  role = {
+    "Contributor" = ["ObjevctID-2334-53rd-dummyID", "4IDIDID-7349-DUMMYID-OBJECTf"],
+    "Owner"       = ["a63120c8-4338-86es-dummyID"]
+  }
+}
+
+
+module "roleAssignment" {
+  for_each = local.role
+  source   = "../../"
+
+  role_definition_name = each.key
+  scope_id             = local.rg_id
+  principal_ids        = each.value
+}
+
 ```

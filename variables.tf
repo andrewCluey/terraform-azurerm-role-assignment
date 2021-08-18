@@ -1,22 +1,14 @@
-variable "custom_role_definition_id" {
-  type        = string
-  description = "If assigning a custom role, enter the Scoped-ID of the Role Definition here. Conflicts with builtin_role_definition_name."
-  default     = null
-}
-
-variable "builtin_role_definition_name" {
+variable "role_definition_name" {
     type        = any
-    description = "If assigning a built in role, enter the name here. If notusing this parameter, then 'custom_role_defintion_id' must be set. "
-    default     = null
+    description = "The name of the Role to assign to the chosen Scope."
 }
 
 variable "scope_id" {
   type        = string
-  description = "The Id of the scope where the role should be assigned. Can be subscription, Management group or Resource group."
+  description = "The Id of the scope where the role should be assigned."
 }
 
-variable "principal_id" {
-  type        = string
-  description = "description"
+variable "principal_ids" {
+  type        = list(string)
+  description = "The ID of the principal that is to be assigned the role at the given scope. Can be User, Group or SPN."
 }
-
