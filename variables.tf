@@ -16,6 +16,6 @@ variable "principal_ids" {
 
 variable "skip_service_principal_aad_check" {
   type        = bool
-  description = "If the Principal is a newly created Service Principal, settign this to `true` will skip AAD checks (sometimes faisl due to replicationlag). Only applies to Service Principals."
+  description = "If the Principal is a newly created Service Principal, setting this to `true` will skip AAD checks (sometimes fails due to replication lag). Only applies to Service Principals."
   default     = false
 }

@@ -7,8 +7,9 @@ Terraform module to assign either a custom or built in role to a resource in Azu
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
 | `scope_id` | `string` | true | The ID of the Subscription, Management Group or Resource group where the role is to be assigned. |
-| `principal_ids` | `string` | true | A list of Object IDs definint the User, Group or Service Principal that is to be assigned the role. |
+| `principal_ids` | `string` | true | A list of Object IDs to define the User, Group or Service Principal that is to be assigned the role. |
 | `role_definition_name` | `string` | true | The name of the role (such as Owner or Contributor) to assign to the principal at the chosen scope.|
+| `skip_service_principal_aad_check` | 'bool' | false | Ignores the AAD check for Service Principals. Useful if creatign a new SPN as part of the deployment (Replication lag). |
 
 ## Example deployments
 Below are two possible ways to pefform the same task. That being to assign Contributor and Owner rights to a new Resource group.
@@ -32,7 +33,7 @@ locals {
 }
 
 
-module "Owner_roleAssignment" {
+module "owner_assignment" {
   source   = "../../"
 
   role_definition_name = "Owner"
@@ -40,7 +41,7 @@ module "Owner_roleAssignment" {
   principal_ids        = local.Owner_principals
 }
 
-module "Contributor_roleAssignment" {
+module "contributor_assignment" {
   source   = "../../"
 
   role_definition_name = "Contributor"
@@ -68,7 +69,7 @@ locals {
 }
 
 
-module "roleAssignment" {
+module "role_assignment" {
   for_each = local.role
   source   = "../../"
 
