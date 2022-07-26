@@ -25,3 +25,14 @@ output "role_assignments" {
   }
 EOD
 }
+
+
+#output "assignment_id" {
+#  description = "The ID of the Role Assignment"
+#  value       = azurerm_role_assignment.role_assignment[each.key].id
+#}
+
+output "scope" {
+  description = "The scope at which the role assignment is to be assigned."
+  value = [for k in azurerm_role_assignment.role_assignment : k.scope ]
+}
