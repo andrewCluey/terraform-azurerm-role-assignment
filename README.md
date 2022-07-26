@@ -7,9 +7,9 @@ Terraform module to assign either a custom or built in role to a resource in Azu
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
 | `scope_id` | `string` | true | The ID of the Subscription, Management Group or Resource group where the role is to be assigned. |
-| `principal_ids` | `string` | true | A list of Object IDs to define the User, Group or Service Principal that is to be assigned the role. |
-| `role_definition_name` | `string` | true | The name of the role (such as Owner or Contributor) to assign to the principal at the chosen scope.|
-| `skip_service_principal_aad_check` | 'bool' | false | Ignores the AAD check for Service Principals. Useful if creatign a new SPN as part of the deployment (Replication lag). |
+| `principal_ids` | `string` | true | A list of Object IDs that define the User, Group or Service Principal to be assigned the role at the given scope. Module will iterate over each item, creating each assignment separately. |
+| `role_definition_name` | `string` | true | The name of the role (such as Owner or Contributor) to assign to the principal at the given scope.|
+| `skip_service_principal_aad_check` | 'bool' | false | Ignores the AAD check for Service Principals. Useful if creating a new SPN as part of the deployment (Replication lag). |
 
 ## Example deployments
 Below are two possible ways to pefform the same task. That being to assign Contributor and Owner rights to a new Resource group.

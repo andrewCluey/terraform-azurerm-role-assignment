@@ -27,12 +27,11 @@ EOD
 }
 
 
-#output "assignment_id" {
-#  description = "The ID of the Role Assignment"
-#  value       = azurerm_role_assignment.role_assignment[each.key].id
-#}
-
 output "scope" {
-  description = "The scope at which the role assignment is to be assigned."
+  description = <<EOF
+  As this module assigns roles for each `var.principal_ids`, at the specified scope. The output is returned as a list.
+  Even though the scope is the same for each Principal.
+  Future change will modify this so that returned output is a simple string.
+EOF
   value = [for k in azurerm_role_assignment.role_assignment : k.scope ]
 }

@@ -18,9 +18,6 @@ provider "azurerm" {
 }
 
 
-
-
-
 # As with all Terraform modules, we can use local values and specific 
 # resource blocks for providing data inputs into the test assertions.
 # Or, to do any necessary post-processing of the results from the module in preparation for writing test assertions.
@@ -73,6 +70,6 @@ resource "test_assertions" "assignment" {
 
   #check "id" {
   #  description = "Do we get an assignment ID returned in Output?"
-  #  condition   = can(regex("valid regex for ssignment ID format ????))
+  #  condition   = can(regex("valid regex for assignment ID format ????))
   #}
 }
