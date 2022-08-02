@@ -14,9 +14,32 @@ Terraform module to assign either a custom or built in role to a resource in Azu
 ## Example deployments
 Below are two possible ways to pefform the same task. That being to assign Contributor and Owner rights to a new Resource group.
 
-The first option is the simplest way, in that two separate modules are used. Once to assign the Owner role and the other to assgn the Contributor role.
+The first option is the simplest way, where each Role Assignment at a specific scope has its own module block. One to assign the Owner role and the other to assign the Contributor role.
 
-### Exmaple showing a simpel deployment. Using separate modules for assignign different roles.
+The second example uses the `for_each` expression to perform the same role assignments but with only one module block. Here, we loop through a map object that defines all the different roles to assign at the scope (in this case a Resource group). In the `role` map object, we supply a list of principal IDs (objectID) that will be assigned the role. While slightly more complex to write initially, it does mean assigning new roles in the future is simpler as you would only need to edit the `locals` block with a new list within the map. For example:
+
+initial deployment
+```
+locals {
+  role = {
+    "Reader" = ["ObjevctID-2334-53rd-dummyID", "4IDIDID-7349-DUMMYID-OBJECTf"],
+    "Owner"       = ["a63120c8-4338-86es-dummyID"]
+  }
+}
+```
+
+Adding a new role assignment
+```
+locals {
+  role = {
+    "Reader"      = ["ObjevctID-2334-53rd-dummyID", "4IDIDID-7349-DUMMYID-OBJECTf"],
+    "Owner"       = ["a63120c8-4338-86es-dummyID"],
+    "Contributor" = ["exRoleId456-8ygds-CntrAcc355-1234", "another-Obj3ctID-f0r-CntrAcc355"]
+  }
+}
+```
+
+### Exmaple showing a simple deployment. Using separate modules for assigning different roles at the same scope (Resource Group is shown here but could be any valid Azure resource).
 
 ```hcl
 
@@ -51,7 +74,7 @@ module "contributor_assignment" {
 
 ```
 
-### Example showing deploying multiple assignments to different scopes with different Roles using for_each at the ```module```.
+### Example showing a deployment of different Roles, to different principals, at the same scope using `for_each` at the `module`.
 
 ```hcl
 
@@ -79,3 +102,10 @@ module "role_assignment" {
 }
 
 ```
+
+
+## testing
+
+Several tests have been written for this module using the experimenal Terraform feature `terraform test`. These are currently simple in nature, and using just the terraformn output from a deployment of the module to ensure that the module does what it says on the tin. These can be found in ./tests directory.
+
+

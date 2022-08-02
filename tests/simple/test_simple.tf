@@ -37,11 +37,11 @@ locals {
 }
 
 
-# Here, we are deploying a simple role assignment with the role_assignment module.
-# It will assign the `Owner` role, at the scope of the new Resource Group,
-# to the Principals defined in the `local.owner_principals`.
+# Here, we are deploying a simple role assignment using the role_assignment module.
+# It will assign the `Owner` role, to the Principals defined in the `local.owner_principals`, 
+# at the scope of the new Resource Group.
 module "role_assignment" {
-# source is always "../.."" for test suite configurations,
+# source is always "../.." for test suite configurations,
 # because they are placed two sub-directories deep under the main module directory.
   source   = "../../"
 
@@ -54,16 +54,16 @@ module "role_assignment" {
 # The special test_assertions resource type, which belongs
 # to the test provider we specified in the providers block, is a temporary
 # syntax for writing out explicit test assertions.
-resource "test_assertions" "assignment" {
+resource "test_assertions" "ownr_assignment" {
   # "component" serves as a unique identifier for this particular set of assertions in the test results.
-  component = "assignment"
+  component = "ownr_assignment"
 
   # equal and check blocks serve as the test assertions.
-  # The labels on these blocks are unique identifiers for the assertions, to allow more easily tracking changes
+  # The labels on these blocks are unique identifiers for the assertions, to allow simpler tracking of changes
   # in success between runs.
 
   equal "scope" {
-    description = "Confirm that the scope fo the assignment is what we expect. Uses Output from module."
+    description = "Confirm that the scope of the assignment is what we expect. Uses Output from module."
     got         = module.role_assignment.scope
     want        = local.returned_scope_list
   }
