@@ -6,7 +6,7 @@ variable "role_definition_name" {
 
 variable "scope_id" {
   type        = string
-  description = "The Id of the scope where the role should be assigned."
+  description = "The ID of the scope where the role should be assigned."
 }
 
 variable "principal_ids" {

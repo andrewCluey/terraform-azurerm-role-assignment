@@ -12,7 +12,7 @@ Terraform module to assign either a custom or built in role to a resource in Azu
 | `skip_service_principal_aad_check` | 'bool' | false | Ignores the AAD check for Service Principals. Useful if creating a new SPN as part of the deployment (Replication lag). |
 
 ## Example deployments
-Below are two possible ways to pefform the same task. That being to assign Contributor and Owner rights to a new Resource group.
+Below are two possible ways to perform the same task. Specifically, to assign Contributor and Owner rights to a new Resource group.
 
 The first option is the simplest way, where each Role Assignment at a specific scope has its own module block. One to assign the Owner role and the other to assign the Contributor role.
 
@@ -39,7 +39,7 @@ locals {
 }
 ```
 
-### Exmaple showing a simple deployment. Using separate modules for assigning different roles at the same scope (Resource Group is shown here but could be any valid Azure resource).
+### Example showing a simple deployment. Using separate modules for assigning different roles at the same scope (Resource Group is shown here but could be any valid Azure resource).
 
 ```hcl
 
